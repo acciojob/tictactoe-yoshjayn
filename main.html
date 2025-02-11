@@ -41,7 +41,7 @@
 </head>
 <body>
     <div class="container">
-        <div id="playerInput">
+        <div id="playerInput" style="display: block;">
             <h2>Enter Player Names</h2>
             <input type="text" id="player1" placeholder="Player 1 Name">
             <input type="text" id="player2" placeholder="Player 2 Name">
@@ -65,7 +65,11 @@
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ];
-        
+		document.addEventListener("DOMContentLoaded", function () {
+		    console.log("Page fully loaded");
+		    console.log("Checking for player1:", document.querySelector("#player1"));
+		});
+
         document.getElementById("submit").addEventListener("click", () => {
             player1 = document.getElementById("player1").value;
             player2 = document.getElementById("player2").value;
