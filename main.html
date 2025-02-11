@@ -43,8 +43,8 @@
     <div class="container">
         <div id="playerInput">
             <h2>Enter Player Names</h2>
-            <input type="text" id="player-1" placeholder="Player 1 Name">
-            <input type="text" id="player-2" placeholder="Player 2 Name">
+            <input type="text" id="player1" placeholder="Player 1 Name">
+            <input type="text" id="player2" placeholder="Player 2 Name">
             <button id="submit">Start Game</button>
         </div>
         <div id="gameBoard" class="hidden">
@@ -67,8 +67,8 @@
         ];
         
         document.getElementById("submit").addEventListener("click", () => {
-            player1 = document.getElementById("player-1").value;
-            player2 = document.getElementById("player-2").value;
+            player1 = document.getElementById("player1").value;
+            player2 = document.getElementById("player2").value;
             if (player1 && player2) {
                 document.getElementById("playerInput").classList.add("hidden");
                 document.getElementById("gameBoard").classList.remove("hidden");
