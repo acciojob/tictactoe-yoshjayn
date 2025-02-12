@@ -84,17 +84,20 @@
             }
         });
         
-        function createBoard() {
-            board.innerHTML = "";
-            for (let i = 0; i < 9; i++) {
-                let cell = document.createElement("div");
-                cell.classList.add("cell");
-                cell.setAttribute("id", i);
-                cell.addEventListener("click", () => handleMove(i));
-                board.appendChild(cell);
-                cells.push(cell);
-            }
-        }
+       
+		function createBoard() {
+    board.innerHTML = "";
+    cells = []; // Reset cells array
+    for (let i = 0; i < 9; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.setAttribute("id", i);
+        cell.addEventListener("click", () => handleMove(i));
+        board.appendChild(cell);
+        cells.push(cell);
+    }
+}
+
         
         function handleMove(index) {
             if (gameState[index] === "" && isGameActive) {
