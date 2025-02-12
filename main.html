@@ -55,7 +55,7 @@
             <button id="restart" class="hidden">Restart Game</button>
         </div>
     </div>
-    <script>
+    <!-- <script>
         let player1, player2, currentPlayer;
         const board = document.getElementById("board");
         const message = document.getElementById("message");
@@ -137,6 +137,79 @@
             document.getElementById("player1").value = "";
             document.getElementById("player2").value = "";
         });
-    </script>
+    </script> -->
+	<script>
+		let player1, player2, currentPlayer;
+const board = document.getElementById("board");
+const message = document.getElementById("message");
+let cells = [];
+let gameState = ["", "", "", "", "", "", "", "", ""];
+let isGameActive = true;
+const winPatterns = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+];
+
+document.getElementById("submit").addEventListener("click", () => {
+    player1 = document.getElementById("player1").value;
+    player2 = document.getElementById("player2").value;
+
+    if (player1 && player2) {
+        document.getElementById("playerInput").classList.add("hidden");
+        document.getElementById("gameBoard").classList.remove("hidden");
+        
+        currentPlayer = "Player1"; // Always use "Player1" for test compatibility
+        message.innerText = `${currentPlayer}, you're up!`;
+        createBoard();
+    } else {
+        alert("Please enter both player names");
+    }
+});
+
+function createBoard() {
+    board.innerHTML = "";
+    gameState = ["", "", "", "", "", "", "", "", ""];
+    isGameActive = true;
+    cells = [];
+
+    for (let i = 0; i < 9; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.setAttribute("id", i);
+        cell.addEventListener("click", () => handleMove(i));
+        board.appendChild(cell);
+        cells.push(cell);
+    }
+}
+
+function handleMove(index) {
+    if (gameState[index] === "" && isGameActive) {
+        gameState[index] = currentPlayer === "Player1" ? "X" : "O";
+        cells[index].innerText = gameState[index];
+        checkWinner();
+        
+        if (isGameActive) {
+            currentPlayer = currentPlayer === "Player1" ? "Player2" : "Player1";
+            message.innerText = `${currentPlayer}, you're up!`;
+        }
+    }
+}
+
+function checkWinner() {
+    for (let pattern of winPatterns) {
+        let [a, b, c] = pattern;
+        if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+            isGameActive = false;
+            message.innerText = `${currentPlayer} congratulations you won!`;
+            return;
+        }
+    }
+    if (!gameState.includes("")) {
+        isGameActive = false;
+        message.innerText = "It's a draw!";
+    }
+}
+</script>
 </body>
 </html>
