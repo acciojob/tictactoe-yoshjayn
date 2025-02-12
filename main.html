@@ -29,6 +29,7 @@
             font-size: 24px;
             border: 2px solid black;
             cursor: pointer;
+            background-color: white;
         }
         .hidden {
             display: none;
@@ -41,7 +42,7 @@
 </head>
 <body>
     <div class="container">
-        <div id="playerInput" style="display: block;">
+        <div id="playerInput">
             <h2>Enter Player Names</h2>
             <input type="text" id="player1" placeholder="Player 1 Name">
             <input type="text" id="player2" placeholder="Player 2 Name">
@@ -51,31 +52,31 @@
             <h1>Tic Tac Toe</h1>
             <div class="message" id="message"></div>
             <div class="board" id="board"></div>
+            <button id="restart" class="hidden">Restart Game</button>
         </div>
     </div>
     <script>
         let player1, player2, currentPlayer;
         const board = document.getElementById("board");
         const message = document.getElementById("message");
-        let cells = [];
+        const restartBtn = document.getElementById("restart");
         let gameState = ["", "", "", "", "", "", "", "", ""];
         let isGameActive = true;
+
         const winPatterns = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ];
-		document.addEventListener("DOMContentLoaded", function () {
-		    console.log("Page fully loaded");
-		    console.log("Checking for player1:", document.querySelector("#player1"));
-		});
 
         document.getElementById("submit").addEventListener("click", () => {
             player1 = document.getElementById("player1").value;
             player2 = document.getElementById("player2").value;
+
             if (player1 && player2) {
                 document.getElementById("playerInput").classList.add("hidden");
                 document.getElementById("gameBoard").classList.remove("hidden");
+
                 currentPlayer = player1;
                 message.innerText = `${currentPlayer}, you're up!`;
                 createBoard();
@@ -83,46 +84,59 @@
                 alert("Please enter both player names");
             }
         });
-        
-       
-		function createBoard() {
-    board.innerHTML = "";
-    cells = []; // Reset cells array
-    for (let i = 0; i < 9; i++) {
-        let cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.setAttribute("id", i);
-        cell.addEventListener("click", () => handleMove(i));
-        board.appendChild(cell);
-        cells.push(cell);
-    }
-}
 
-        
+        function createBoard() {
+            board.innerHTML = "";
+            gameState = ["", "", "", "", "", "", "", "", ""];
+            isGameActive = true;
+            restartBtn.classList.add("hidden");
+
+            for (let i = 0; i < 9; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.setAttribute("id", i);
+                cell.addEventListener("click", () => handleMove(i));
+                board.appendChild(cell);
+            }
+        }
+
         function handleMove(index) {
             if (gameState[index] === "" && isGameActive) {
-                gameState[index] = currentPlayer === player1 ? "X" : "O";
-                cells[index].innerText = gameState[index];
-                checkWinner();
-                currentPlayer = currentPlayer === player1 ? player2 : player1;
-                if (isGameActive) message.innerText = `${currentPlayer}, you're up!`;
-            }
-        }
-        
-        function checkWinner() {
-            for (let pattern of winPatterns) {
-                let [a, b, c] = pattern;
-                if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
-                    isGameActive = false;
+                const symbol = currentPlayer === player1 ? "X" : "O";
+                gameState[index] = symbol;
+                document.getElementById(index).innerText = symbol;
+
+                if (checkWinner(symbol)) {
                     message.innerText = `${currentPlayer}, congratulations you won!`;
+                    isGameActive = false;
+                    restartBtn.classList.remove("hidden");
                     return;
                 }
-            }
-            if (!gameState.includes("")) {
-                isGameActive = false;
-                message.innerText = "It's a draw!";
+
+                if (!gameState.includes("")) {
+                    message.innerText = "It's a draw!";
+                    isGameActive = false;
+                    restartBtn.classList.remove("hidden");
+                    return;
+                }
+
+                currentPlayer = currentPlayer === player1 ? player2 : player1;
+                message.innerText = `${currentPlayer}, you're up!`;
             }
         }
+
+        function checkWinner(symbol) {
+            return winPatterns.some(pattern => 
+                pattern.every(index => gameState[index] === symbol)
+            );
+        }
+
+        restartBtn.addEventListener("click", () => {
+            document.getElementById("playerInput").classList.remove("hidden");
+            document.getElementById("gameBoard").classList.add("hidden");
+            document.getElementById("player1").value = "";
+            document.getElementById("player2").value = "";
+        });
     </script>
 </body>
 </html>
